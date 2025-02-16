@@ -42,17 +42,75 @@
             const saveSuccess = "Zapisano";
 
             const repoOwner = "przemekkojs";
-            const repoName = "";
+            const repoName = "TokenTests";
+            const filePath = "files/text.txt";
+            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/${filePath}`;
 
             saveButton.onclick = () => save;
             loadButton.onclick = () => load;
 
             async function load() {
+                console.log('abc');
                 log(loading);
+
+                const token = tokenBox.value;
+
+                if (!token)
+                    throw new Error('Wpisz token');
+
+                try {
+                    constole.log("siup");
+                    const response = await fetch(apiUrl, {headers: {"Authorization": `token ${token}`}});
+                    constole.log(response);
+                    if (!response.ok)
+                        throw new Error(loadFail);
+
+                    const data = await response.json();
+                    const content = atob(data.content);
+                    const sha = data.sha;
+
+                    textBox.value = content;
+                    textBox.setAttribute('data-sha', sha);
+
+                    log (loadSuccess, 'i');
+                }
+                catch (error) {
+                    log (error.message, 'e');
+                }
             }
 
             async function save() {
                 log(saving);
+
+                const token = tokenBox.value;
+
+                if (!token)
+                    throw new Error('Wpisz token');
+
+                try {
+                    const content = btoa(textBox.value);
+                    const sha = textBox.getAttribute("data-sha");
+
+                    const response = await fetch(apiUrl, {
+                        method: "PUT",
+                        headers: {
+                            "Authorization": `token ${token}`,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            message: "Aktualizacja pliku przez stronę",
+                            content: content,
+                            sha: sha
+                        })
+                    });
+
+                    if (!response.ok)
+                        throw new Error("Błąd zapisu");
+
+                    log (saveSuccess, 'i');
+                } catch (error) {
+                    log (error.message, 'e');
+                }
             }
 
             function log(what, level='') {
