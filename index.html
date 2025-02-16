@@ -16,9 +16,9 @@
 
                 <div>
                     <textarea id="text" style="min-width: 500px; min-height: 500px;"></textarea><br>
-                    <input type="button" value="Załaduj" id="load">
+                    <input type="button" value="Załaduj" id="load" onclick="load()">
                     <input type="text" id="token">
-                    <input type="button" value="Wyślij" id="save">
+                    <input type="button" value="Wyślij" id="save" onclick="save()">
                 </div>                
             </article>
 
@@ -43,25 +43,19 @@
 
             const repoOwner = "przemekkojs";
             const repoName = "TokenTests";
-            const filePath = "files/text.txt";
-            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/${filePath}`;
-
-            saveButton.onclick = () => save;
-            loadButton.onclick = () => load;
+            const filePath = "text.txt";
+            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
 
             async function load() {
-                console.log('abc');
                 log(loading);
 
-                const token = tokenBox.value;
-
-                if (!token)
-                    throw new Error('Wpisz token');
-
                 try {
-                    constole.log("siup");
+                    const token = tokenBox.value;
+
+                    if (!token)
+                        throw new Error('Wpisz token');
+
                     const response = await fetch(apiUrl, {headers: {"Authorization": `token ${token}`}});
-                    constole.log(response);
                     if (!response.ok)
                         throw new Error(loadFail);
 
@@ -80,14 +74,14 @@
             }
 
             async function save() {
-                log(saving);
-
-                const token = tokenBox.value;
-
-                if (!token)
-                    throw new Error('Wpisz token');
+                log(saving);                
 
                 try {
+                    const token = tokenBox.value;
+
+                    if (!token)
+                        throw new Error('Wpisz token');
+
                     const content = btoa(textBox.value);
                     const sha = textBox.getAttribute("data-sha");
 
@@ -131,10 +125,6 @@
                         break;
                 }
             }
-        </script>
-
-        <script>
-            load();
         </script>
     </body>
 </html>
