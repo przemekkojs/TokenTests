@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Testy GH Actions</title>
+    </head>
+    <body>
+        <main>
+            <header>
+                <h1>Testy GH Actions</h1>
+            </header>
+
+            <article>
+                <div>
+                    <span id="logs" style="color: red;"></span>
+                </div>
+
+                <div>
+                    <textarea id="text" style="min-width: 500px; min-height: 500px;"></textarea><br>
+                    <input type="button" value="Załaduj" id="load">
+                    <input type="text" id="token">
+                    <input type="button" value="Wyślij" id="save">
+                </div>                
+            </article>
+
+            <footer>
+                © Przemysław Kojs 2025
+            </footer>
+        </main>
+
+        <script>
+            const textBox = document.getElementById('text');
+            const tokenBox = document.getElementById('token');
+            const saveButton = document.getElementById('save');
+            const loadButton = document.getElementById('load');
+            const logsSpan = document.getElementById('logs');
+
+            const loading = "Ładowanie...";
+            const loadFail = "Błąd ładowania pliku";
+            const loadSuccess = "Załadowano";
+            const saving = "Zapisywanie...";
+            const saveFail = "Błąd zapisywania pliku";
+            const saveSuccess = "Zapisano";
+
+            const repoOwner = "przemekkojs";
+            const repoName = "";
+
+            saveButton.onclick = () => save;
+            loadButton.onclick = () => load;
+
+            async function load() {
+                log(loading);
+            }
+
+            async function save() {
+                log(saving);
+            }
+
+            function log(what, level='') {
+                logs.innerText = what;
+
+                switch (level) {
+                    case 'i':
+                        logs.style = 'color: green;';
+                        break;
+                    case 'w':
+                        logs.style = 'color: orange;';
+                        break;
+                    case 'e':
+                        logs.style = 'color: red;';
+                        break;
+                    default:
+                        logs.style = 'color: black;';
+                        break;
+                }
+            }
+        </script>
+
+        <script>
+            load();
+        </script>
+    </body>
+</html>
